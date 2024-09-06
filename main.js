@@ -1,5 +1,8 @@
 puntajeJugador = 0;
 puntajeComputadora = 0;
+entrada = 0;
+opcionUsuario1 = "";
+opcionUsuario2 = "";
 const marcador_usuario = document.getElementById("marcador-usuario");
 const marcador_computador = document.getElementById("marcador-computador");
 const marcador = document.querySelector(".marcador");
@@ -8,48 +11,72 @@ const piedra = document.getElementById("piedra");
 const papel = document.getElementById("papel");
 const tijera = document.getElementById("tijera");
 const reiniciar = document.getElementById("boton");
+const mensaje = document.getElementById("mensaje");
 
-
-function jugar(opcionUsuario) {
+function jugar(opcionUsuario1, opcionUsuario2) {
     const opciones = ['Piedra', 'Papel', 'Tijera'];
     const numeroAleatorio = Math.floor(Math.random() * 3);
     const opcionComputadora = opciones[numeroAleatorio];
 
-    switch (opcionUsuario + opcionComputadora) {
+    switch (opcionUsuario1 + opcionUsuario2) {
         case 'PiedraTijera':
         case 'PapelPiedra':
         case 'TijeraPapel':
-            ganar(opcionUsuario, opcionComputadora);
+            ganar(opcionUsuario1, opcionUsuario2);
             break;
         case 'PiedraPapel':
         case 'PapelTijera':
         case 'TijeraPiedra':
-            perder(opcionUsuario, opcionComputadora);
+            perder(opcionUsuario1, opcionUsuario2);
             break;
         case 'PiedraPiedra':
         case 'PapelPapel':
         case 'TijeraTijera':
-            empatar(opcionUsuario, opcionComputadora);
+            empatar(opcionUsuario1, opcionUsuario2);
             break;
     }
 }
 
-function ganar(opcionUsuario, opcionComputadora) {
+function ganar(opcionUsuario, opcionUsuario2) {
     puntajeJugador++;
     marcador_usuario.innerHTML = puntajeJugador;
     marcador_computador.innerHTML = puntajeComputadora;
-    resultado.innerHTML = `${opcionUsuario} vence a ${opcionComputadora}. Ganaste!`;
+    resultado.innerHTML = `${opcionUsuario} vence a ${opcionUsuario2}. Ganaste el jugador 1!`;
+    entrada = 0;
+    opcionUsuario1 = "";
+    opcionUsuario2 = "";
+    mensaje.innerHTML = "A jugar nuevamente!";
+
+
 }
 
-function perder(opcionUsuario, opcionComputadora) {
+function perder(opcionUsuario, opcionUsuario2) {
     puntajeComputadora++;
     marcador_usuario.innerHTML = puntajeJugador;
     marcador_computador.innerHTML = puntajeComputadora;
-    resultado.innerHTML = `${opcionUsuario} pierde ante ${opcionComputadora}. Perdiste!`;
+    resultado.innerHTML = `${opcionUsuario} pierde ante ${opcionUsuario2}. Ganó el jugador 2!`;
+    entrada = 0;
+    opcionUsuario1 = "";
+    opcionUsuario2 = "";
+    mensaje.innerHTML = "A jugar nuevamente!";
+
+
 }
 
-function empatar(opcionUsuario, opcionComputadora) {
-    resultado.innerHTML = `${opcionUsuario} es igual a ${opcionComputadora}. Empate!`;
+function empatar(opcionUsuario, opcionUsuario2) {
+    resultado.innerHTML = `${opcionUsuario} es igual a ${opcionUsuario2}. Empate!`;
+    entrada = 0;
+    opcionUsuario1 = "";
+    opcionUsuario2 = "";
+    mensaje.innerHTML = "A jugar nuevamente!";
+
+}
+
+
+function validarJugadas() {
+    if (opcionUsuario1 !== "" && opcionUsuario2 !== "") {
+        jugar(opcionUsuario1, opcionUsuario2);
+    }
 }
 
 
@@ -62,20 +89,51 @@ function restart(){
 }
 
 piedra.addEventListener('click', function() {
-    jugar('Piedra');
+    if (entrada == 0) {
+        opcionUsuario1 = 'Piedra';
+        entrada += 1;
+        mensaje.innerHTML = "Jugador 2 ahora es tu turno!";
+    } else {
+        opcionUsuario2 = 'Piedra';
+        entrada += 1;
+    }
+    validarJugadas();
 });
 
 papel.addEventListener('click', function() {
-    jugar('Papel');
+    if (entrada == 0) {
+        opcionUsuario1 = 'Papel';
+        entrada += 1;
+        mensaje.innerHTML = "Jugador 2 ahora es tu turno!";
+    } else {
+        opcionUsuario2 = 'Papel';
+        entrada += 1;
+    }
+    validarJugadas();
 });
 
 tijera.addEventListener('click', function() {
-    jugar('Tijera');
+    if (entrada == 0) {
+        opcionUsuario1 = 'Tijera';
+        entrada += 1;
+        mensaje.innerHTML = "Jugador 2 ahora es tu turno!";
+    } else {
+        opcionUsuario2 = 'Tijera';
+        entrada += 1;
+    }
+    validarJugadas();
 });
 
-boton.addEventListener('click', function() {
-    restart();
+reiniciar.addEventListener('click', function() {
+    puntajeJugador = 0;
+    puntajeComputadora = 0;
+    marcador_usuario.innerHTML = puntajeJugador;
+    marcador_computador.innerHTML = puntajeComputadora;
+    resultado.innerHTML = `Juego reiniciado`;
+    opcionUsuario1 = "";
+    opcionUsuario2 = "";
+    entrada = 0;
+    mensaje.innerHTML = "Jugador 1 elige!";
 });
-
 
 
